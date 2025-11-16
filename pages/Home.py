@@ -3,12 +3,9 @@ from Início import *
 from complements.counts.Visualização_Geral_das_Contas import *
 
 
+print(st.session_state)
 
-if "usuario_logado" not in st.session_state:
-      st.session_state.usuario_logado = None
-      st.switch_page("Início.py")
+if st.session_state.usuario_logado == None:
+  st.error("Atenção, você deve estar logado para acessar essa página")
 else:
-      if st.session_state.usuario_logado == None:
-            st.error("Você deve estar logado para acessar o aplicativo")
-      else:
-            load_general_vision()
+  load_general_vision()

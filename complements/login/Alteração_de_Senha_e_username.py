@@ -18,11 +18,11 @@ def load_password_chage():
               delete_created_user = st.button("Excluir Usuário")
               if delete_created_user:
                 if delete_user(user_id=user_created_id.id):
-                  st.success("Usuário Excluido com Sucesso")
+                  password_change_container.success("Usuário Excluido com Sucesso")
                 else:
-                  st.error("Erro ao excluir usuário")
+                  password_change_container.error("Erro ao excluir usuário")
             else:
-               st.error("Senhas não conferem")
+              password_change_container.error("Senhas não conferem")
       new_password_input = password_change_container.text_input("Insira aqui sua nova senha",type="password")
       new_user_name_input = password_change_container.text_input("Insira aqui seu novo username")
       if new_password_input or new_user_name_input:
@@ -38,14 +38,14 @@ def load_password_chage():
           if new_password_input == "":
             new_password_input = None
           if update_user_password_username(user=user_created_id.id,new_password=new_password_input,new_username=new_user_name_input):
-            st.success("Senha alterada com sucesso")
+            password_change_container.success("Senha alterada com sucesso")
           else:
-            st.error("Ocorreu um erro, tente novamente")
+            password_change_container.error("Ocorreu um erro, tente novamente")
         
     else:
-        st.error("Usuário não encontrado. Insira um usuário válido")
+        password_change_container.error("Usuário não encontrado. Insira um usuário válido")
   else:
-      st.warning("Atenção: Você deve inserir um usuário existente para alterar a senha")
+      password_change_container.warning("Atenção: Você deve inserir um usuário existente para alterar a senha")
 
 
 

@@ -8,8 +8,6 @@ def load_general_vision():
   add_new_count =title_container.popover("➕")
   with add_new_count:
           load_add_count()
- 
-  
   try:
       general_vision_contanier.divider()
       subcontainer = general_vision_contanier.container(border=False,horizontal=True,horizontal_alignment="distribute",vertical_alignment="center")

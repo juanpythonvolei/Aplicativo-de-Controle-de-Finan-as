@@ -3,11 +3,13 @@ from engine.users.creation_and_update import *
 from engine.users.Acess.user_acess import *
 from engine.Counts.Counts_manegement import query_user_by_count_owner_id
 
-if "usuario_logado" not in st.session_state:
-      st.session_state.usuario_logado = None
+
+if 'usuario_logado' not in st.session_state:
+  st.session_state.usuario_logado = None
+else:
+  print(st.session_state)
 
 if st.session_state.usuario_logado == None:
-
   main_container = st.container(
     border=True
   )
@@ -31,10 +33,6 @@ if st.session_state.usuario_logado == None:
       st.error("Preeehca o campo de usuário")
     else:
       st.error("Preencha o campo de senha")
-
 else:
-  finalize_section = st.container(border=True)
-  finalize_section.title(f"{query_user_by_count_owner_id(st.session_state.usuario_logado).username}")
-  finalize_section.button("Finalizar Sessão")
-  if finalize_section:
-    st.session_state.usuario_logado = None
+  st.success("Atenção, Você já está logado")
+
