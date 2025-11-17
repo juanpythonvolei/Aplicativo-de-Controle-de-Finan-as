@@ -4,6 +4,7 @@ from datetime import datetime
 from engine.Counts.Counts_manegement import *
 
 def load_general_Vision_per_date():
+  session.rollback()
   container = st.container(border=True,key=f"Payment_container")
   select_boxes =container.container(border=False,horizontal=True)
   payment_date_selection = select_boxes.selectbox(label="Selecione um dia de vencimento",index=None,options=(list(set([item.payment_day for item in load_count(st.session_state.usuario_logado)]))))
@@ -13,20 +14,20 @@ def load_general_Vision_per_date():
   if payment_date_selection:
     if new_selectbox:
       itens = query_counts_per_date(date=new_selectbox,user=st.session_state.usuario_logado,payment_day=payment_date_selection) 
-      for i,item in enumerate(itens):
+      for i,item in enumerate(list(set(itens))):
         total_date_payed += item.value
         contas_a_serem_pagas.append(item)
       new_container = container.container(border=True,)
       new_container.info(f"""
 
-  Total de Contas no dia de vencimento: {len(itens)}
+  Total de Contas no dia de vencimento: {len(list(set(itens)))}
 
   Total a ser pago {total_date_payed}
   """)
       options_container = new_container.container(border=False,horizontal=True)
       pay = options_container.button("Pagar contas")
       if pay:
-        for pagamento in contas_a_serem_pagas:
+        for pagamento in list(set(contas_a_serem_pagas)):
           if pay_count(pagamento.id,user_id=st.session_state.usuario_logado,date=new_selectbox):
             container.success("Conta paga com sucesso")
       infos = options_container.popover("Ver Contas por Mês")
@@ -34,7 +35,7 @@ def load_general_Vision_per_date():
         
         if new_selectbox:
           payment_day_total_value = 0
-          for conta in contas_a_serem_pagas:
+          for conta in list(set(contas_a_serem_pagas)):
             payment_day_container = st.container(border=True)
             payment_day_total_value = payment_day_total_value + conta.value
             payment_day_container.info(F"""
@@ -97,16 +98,18 @@ def load_divisions_dates(count_id:int):
     year = datetime.now().year
     element= session.query(Counts).filter(Counts.id==count_id).first()
     confirmed_payments = [pay_veri.payment_confirmed_date for pay_veri in session.query(Counts_registration).filter(Counts_registration.count_id == count_id, Counts_registration.owner == st.session_state.usuario_logado).all() ]
-    dates = [f"{element.payment_day}/{month}/{year}"]
+    dates = []
     session.close()
     for i in range(int(element.divisions)):
+      month == int(element.payment_day[3:5])
+      year = int(element.payment_day[6:])
       if month == 12:
           year = year + 1
           month = 1
-          new_date = f"{element.payment_day}/{month}/{year}"
+          new_date = f"{element.payment_day[0:2]}/{str(month)}/{str(year)}"
       else:
          month = month + 1
-         new_date = f"{element.payment_day}/{month}/{year}"
+         new_date = f"{element.payment_day[0:2]}/{str(month)}/{str(year)}"
       if new_date not in confirmed_payments:
         dates.append(new_date)
     session.rollback()

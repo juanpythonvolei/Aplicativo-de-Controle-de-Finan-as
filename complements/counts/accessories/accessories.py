@@ -39,18 +39,18 @@ def load_add_count():
       division_number = st.number_input("Insira o número de Parcelas",value=None)
     else:
        division_number = 1
-    payment_day = st.text_input("Insira o dia de vencimento da Parcela")
+    payment_day = st.date_input("Insira o dia de vencimento da Parcela",format='DD/MM/YYYY',value=datetime.today())
     if new_description and new_Value and payment_day:
       confirm_count_creation = st.button("Adicionar Nova conta")
       if confirm_count_creation:
          
-            if create_count(user=st.session_state.usuario_logado,value=new_Value,divisions=division_number,payment_day=str(payment_day),description=new_description):
+            if create_count(user=st.session_state.usuario_logado,value=new_Value,divisions=division_number,payment_day=str(payment_day.strftime("%d/%m/%Y")),description=new_description):
               st.success("Conta adicionada com sucesso")
 
 def load_settings(item:int):
         modify_description = st.text_area("Modifique a descrição da sua conta",key=item.id*item.id+67.1)
         modify_value = st.number_input("Modifique o valor da sua conta",key=item.id*item.id+17.2,value=None)
-        modify_payment_day = st.text_input("Modifique a data de pagamento",key=item.id*item.id+47.4)
+        modify_payment_day = st.date_input("Modifique a data de pagamento",key=item.id*item.id+47.4,format="DD/MM/YYYY",value=datetime.today())
         modify_divisions = st.number_input("Modifique o número de parcelas",key=item.id*item.id+21.4,value=None)
         if modify_description == "":
               modify_description = None
@@ -63,7 +63,7 @@ def load_settings(item:int):
         if modify_description or modify_divisions or modify_payment_day or modify_value:
               modify_button = st.button("Modificar",key=item.id*item.id+999.1)
               if modify_button:
-                if counts_modification(count_id=item.id,user_id=item.owner,payment_date=modify_payment_day,description=modify_description,value=modify_value,divisions=modify_divisions):
+                if counts_modification(count_id=item.id,user_id=item.owner,payment_date=str(modify_payment_day.strftime("%d/%m/%Y")),description=modify_description,value=modify_value,divisions=modify_divisions):
                     st.success("Alterações realizadas com sucesso")
                 else:
                    st.error("Falha ao realizar alterações")
@@ -75,13 +75,15 @@ def load_payment(item):
     selections = st.container(horizontal=True)
     confirmed_payments = [pay_veri.payment_confirmed_date for pay_veri in session.query(Counts_registration).filter(Counts_registration.count_id == item.id, Counts_registration.owner == st.session_state.usuario_logado).all() ]
     for i in range(int(item.divisions)):
+      month == int(item.payment_day[3:5])
+      year = int(item.payment_day[6:])
       if month == 12:
           year = year + 1
           month = 1
-          new_date = f"{item.payment_day}/{month}/{year}"
+          new_date = f"{item.payment_day[0:2]}/{str(month)}/{str(year)}"
       else:
          month = month + 1
-         new_date = f"{item.payment_day}/{month}/{year}"
+         new_date = f"{item.payment_day[0:2]}/{str(month)}/{str(year)}"
       if new_date not in confirmed_payments:
         dates.append(new_date)
     date_selection = selections.selectbox(label="Selecione uma data de pagamento",key=f"Selectbox {item.id+1,9}",options=dates,index=None)
