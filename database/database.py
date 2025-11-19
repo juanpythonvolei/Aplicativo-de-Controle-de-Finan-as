@@ -2,8 +2,9 @@ import sqlalchemy as sq
 from sqlalchemy import create_engine
 from sqlalchemy.orm import declarative_base, sessionmaker
 from sqlalchemy import Column, Integer, String,Float,Boolean
+import streamlit as st
 
-engine = create_engine("sqlite:///database/banco de dados.db",echo=True)
+engine = create_engine(st.secrets["database_key"],echo=True)
 base = declarative_base()
 
 class Users(base):

@@ -14,7 +14,6 @@ def create_count(user:int,value:float,divisions:float,payment_day:str,descriptio
 
 def load_count(user:int):
   active_count = session.query(Counts).filter(Counts.owner==user,Counts.active==True).all()
-  session.rollback()
 
   if active_count:
     return active_count
@@ -23,7 +22,7 @@ def load_count(user:int):
   
 def query_user_by_count_owner_id(user_id:int):
   existing_user = session.query(Users).filter(Users.id == user_id).first()
-  session.rollback()
+
 
   if existing_user:
     return existing_user
@@ -54,7 +53,6 @@ def delete_count(count_id:int,user_id:int):
     return False
   
 def pay_count(count_id:int,user_id:int,payment=True,date:str=None):
-  session.rollback()
   existing_payment = session.query(Counts_registration).filter(Counts_registration.owner==user_id,Counts_registration.count_id==count_id,Counts_registration.payment_confirmed_date == date).first()
   if existing_payment:
     return False
