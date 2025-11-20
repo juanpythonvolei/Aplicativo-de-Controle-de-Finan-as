@@ -6,8 +6,7 @@ from engine.Counts.Counts_manegement import query_user_by_count_owner_id
 
 if 'usuario_logado' not in st.session_state:
   st.session_state.usuario_logado = None
-else:
-  print(st.session_state)
+
 
 if st.session_state.usuario_logado == None:
   main_container = st.container(
