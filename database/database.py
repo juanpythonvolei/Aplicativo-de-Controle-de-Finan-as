@@ -4,7 +4,7 @@ from sqlalchemy.orm import declarative_base, sessionmaker
 from sqlalchemy import Column, Integer, String,Float,Boolean
 import streamlit as st
 
-default= "sqlite:///database/banco de dados.db"
+
 
 engine = create_engine(st.secrets['database_key'])
 base = declarative_base()

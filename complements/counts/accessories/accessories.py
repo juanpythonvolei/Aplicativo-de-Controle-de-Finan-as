@@ -87,15 +87,16 @@ def load_payment(item):
       if new_date not in confirmed_payments:
         dates.append(new_date)
     date_selection = selections.selectbox(label="Selecione uma data de pagamento",key=f"Selectbox {item.id+1,9}",options=dates,index=None)
-    st.info(f"""
-Valor da Parcela : R$ {item.value}
-""")    
-    pay=st.button(label="Pagar",key=f"Selectbox {item.id+32.1}")
-    if pay:
-      if pay_count(count_id=item.id,user_id=st.session_state.usuario_logado,date=date_selection):
-          st.success("Conta paga com Sucesso")
-      else:
-         st.error("Falha ao pagar a conta")
+    if date_selection:
+      st.info(f"""
+  Valor da Parcela : R$ {item.value}
+  """)    
+      pay=st.button(label="Pagar",key=f"Selectbox {item.id+32.1}")
+      if pay:
+        if pay_count(count_id=item.id,user_id=st.session_state.usuario_logado,date=date_selection):
+            st.success("Conta paga com Sucesso")
+        else:
+          st.error("Falha ao pagar a conta")
 
 def load_payment_history(contas,count_id):
 

@@ -5,37 +5,38 @@ def load_general_vision():
       general_vision_contanier = st.container(border=True)
       title_container = general_vision_contanier.container(horizontal=True)
       title_container.title("Visão Geral das Contas")
-      filters_container = general_vision_contanier.container(border=False,horizontal=True)
+      
       add_new_count =title_container.popover("➕")
       with add_new_count:
           load_add_count()
       try:
-         
         general_vision_contanier.divider()
         subcontainer = general_vision_contanier.container(border=False,horizontal=True,horizontal_alignment="distribute",vertical_alignment="center")
-        counts = load_count(user=st.session_state.usuario_logado)
-        filter_selection = filters_container.multiselect(label="Selecione as contas que deseja visualizar",options=[conta.description for conta in counts])
-        date_filter = filters_container.date_input(label="Filtro de Data",value=None,format="DD/MM/YYYY")
-        filtereds = []
-        if filter_selection:
-          for count_to_filter in counts:
-            if count_to_filter.description in filter_selection:
-                    filtereds.append(count_to_filter)
-          counts = filtereds
-        if date_filter != None:
-          for date_filtered_count in counts:
-              if date_filtered_count.payment_day == date_filter.strftime("%d/%m/%Y"):
-                filtereds.append(date_filtered_count)
-          counts = filtereds
+        filters_container = general_vision_contanier.container(border=False,horizontal=True)
         date_based_vision = subcontainer.toggle("Visualizar por data de vencimento")
         count_based_vision = subcontainer.toggle("Visualizar Contas Finalizadas")
-        if date_based_vision and not count_based_vision:
-          load_general_Vision_per_date()
         if count_based_vision and not date_based_vision:
           load_see_history()
-        general_vision_contanier.divider()
+        if date_based_vision and not count_based_vision:
+          load_general_Vision_per_date()
         if not date_based_vision and not count_based_vision:
-            for item in counts:
+          counts = load_count(user=st.session_state.usuario_logado)
+          filter_selection = filters_container.multiselect(label="Selecione as contas que deseja visualizar",options=[conta.description for conta in counts])
+          date_filter = filters_container.date_input(label="Filtro de Data",value=None,format="DD/MM/YYYY")
+          filtereds = []
+          if filter_selection:
+            for count_to_filter in counts:
+              if count_to_filter.description in filter_selection:
+                      filtereds.append(count_to_filter)
+            counts = filtereds
+          if date_filter != None:
+            for date_filtered_count in counts:
+                if date_filtered_count.payment_day == date_filter.strftime("%d/%m/%Y"):
+                  filtereds.append(date_filtered_count)
+            counts = filtereds
+          general_vision_contanier.divider()
+          
+          for item in counts:
                 item_container = st.container(border=True,horizontal=True,key=item.id*item.id**item.id*12.3,vertical_alignment="center")
                 name_container = item_container.container(border=False,key=f"{item.id*99.12}")
                 name_container.subheader(f"{item.description}")
@@ -66,6 +67,6 @@ def load_general_vision():
                   with info_count_button:
                     load_infos(item.id)
       except:
-         st.warning("Atenção, adicione uma conta para ter uma visão geral das suas finanças")
+        pass
      
  
