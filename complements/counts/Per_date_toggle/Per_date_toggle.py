@@ -94,21 +94,20 @@ def query_counts_per_date(date:str,user:id,payment_day:str):
 
 
 def load_divisions_dates(count_id:int):
-    month = datetime.now().month
-    year = datetime.now().year
+
     element= session.query(Counts).filter(Counts.id==count_id).first()
+    month = int(element.payment_day[3:5])
+    year = int(element.payment_day[6:])
     confirmed_payments = [pay_veri.payment_confirmed_date for pay_veri in session.query(Counts_registration).filter(Counts_registration.count_id == count_id, Counts_registration.owner == st.session_state.usuario_logado).all() ]
     dates = []
     session.close()
     for i in range(int(element.divisions)):
-      month == int(element.payment_day[3:5])
-      year = int(element.payment_day[6:])
-      if month == 12:
-          year = year + 1
+      if month >= 12:
+          year += 1
           month = 1
           new_date = f"{element.payment_day[0:2]}/{str(month)}/{str(year)}"
       else:
-         month = month + 1
+         month +=1
          new_date = f"{element.payment_day[0:2]}/{str(month)}/{str(year)}"
       if new_date not in confirmed_payments:
         dates.append(new_date)
