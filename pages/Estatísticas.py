@@ -1,5 +1,6 @@
 import streamlit as st
 from engine.Counts.Counts_manegement import *
+from engine.Adition.adition import *
 from datetime import datetime
 from engine.Counts.Counts_manegement import *
 import pandas as pd
@@ -42,7 +43,7 @@ else:
           if len(pagamentos)> 0:
       
             infos.metric(label="Valor médio por pagamento",value=f"R$: {valor_total_pago/len(pagamentos)}")
-            
+          infos.metric(label="% do Valor Pago",value=valor_total_pago/valor_total_adicionado*100)
           general_infos.metric(label="Total de Contas Ativas",value=len(contas))
           
           general_infos.metric(label="Total de Contas Finalizadas",value=len(contas_pagas))
@@ -51,6 +52,12 @@ else:
           else:
               value = len(contas_pagas)/len(contas)*100
           general_infos.metric(label="% de Contas Pagas",value=value)
+          infos.divider()
+          infos.subheader("Indicadores de Economias")
+          valor_total_em_uso = sum(valor.value for valor in load_all_entrys(st.session_state.usuario_logado))
+          infos.metric(label="Valor Total em uso",value=f'R$ {valor_total_em_uso}')
+          infos.metric(label="Valor Total em Economia",value=f'R$ {sum(valor.value for valor in load_all_entrys(st.session_state.usuario_logado,True))}')
+          infos.metric(label="% do Valor em uso gasto", value=f"{valor_total_adicionado/valor_total_em_uso * 100}")
         else:
             infos.warning("Atenção, faça mais movimentações para ter os dados exibidos")
         

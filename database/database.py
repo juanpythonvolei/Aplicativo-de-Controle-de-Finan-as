@@ -33,5 +33,13 @@ class Counts_registration(base):
     payment = Column(Boolean)
     payment_confirmed_date = Column(String)
 
+class Entrys(base):
+    __tablename__ = "Entradas"
+    id = Column(Integer,primary_key=True,autoincrement=True,unique=True)
+    owner = Column(Integer)
+    value = Column(Float)
+    entry_date = Column(String)
+    economy = Column(String)
 
+    
 base.metadata.create_all(engine)
