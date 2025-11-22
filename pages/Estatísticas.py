@@ -95,9 +95,9 @@ else:
               entradas = entradas_filtered
               economies = economias_filtered
      
-          
-          valor_total_em_uso = sum(valor.value for valor in entradas)
-          infos.metric(label="Valor Total em uso",value=f'R$ {valor_total_em_uso-valor_total_adicionado}')
+          if entradas:
+               valor_total_em_uso = sum(valor.value for valor in entradas)
+               infos.metric(label="Valor Total em uso",value=f'R$ {valor_total_em_uso-valor_total_adicionado}')
 
           if economies:
             infos.metric(label="Valor Total em Economia",value=f'R$ {sum(valor.value for valor in economies)}')
