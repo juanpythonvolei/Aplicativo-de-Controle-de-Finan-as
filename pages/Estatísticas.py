@@ -101,7 +101,8 @@ else:
 
           if economies:
             infos.metric(label="Valor Total em Economia",value=f'R$ {sum(valor.value for valor in economies)}')
-          infos.metric(label="% do Valor em uso gasto", value=f"{valor_total_adicionado/valor_total_em_uso * 100}")
+          if entradas:
+               infos.metric(label="% do Valor em uso gasto", value=f"{valor_total_adicionado/valor_total_em_uso * 100}")
         else:
             infos.warning("Atenção, faça mais movimentações para ter os dados exibidos")
         
