@@ -21,7 +21,7 @@ def load_general_vision():
           load_general_Vision_per_date()
         if not date_based_vision and not count_based_vision:
           counts = load_count(user=st.session_state.usuario_logado)
-          filter_selection = filters_container.multiselect(label="Selecione as contas que deseja visualizar",options=[conta.description for conta in counts])
+          filter_selection = filters_container.multiselect(label="Selecione as contas que deseja visualizar",options=list(set([conta.description for conta in counts])))
           date_filter = filters_container.date_input(label="Filtro de Data",value=None,format="DD/MM/YYYY")
           filtereds = []
           if filter_selection:
