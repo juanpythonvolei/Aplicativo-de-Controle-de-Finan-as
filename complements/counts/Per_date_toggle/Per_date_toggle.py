@@ -96,12 +96,13 @@ def query_counts_per_date(date:str,user:id,payment_day:str):
 def load_divisions_dates(count_id:int):
 
     element= session.query(Counts).filter(Counts.id==count_id).first()
+    day = int(element.payment_day[0:2])
     month = int(element.payment_day[3:5])
     year = int(element.payment_day[6:])
     confirmed_payments = [pay_veri.payment_confirmed_date for pay_veri in session.query(Counts_registration).filter(Counts_registration.count_id == count_id, Counts_registration.owner == st.session_state.usuario_logado).all() ]
-    dates = []
+    dates = [f'{day}/{month}/{year}']
     session.close()
-    for i in range(int(element.divisions)):
+    for i in range(int(element.divisions)-1):
       if month >= 12:
           year += 1
           month = 1

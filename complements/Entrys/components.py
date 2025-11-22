@@ -28,8 +28,15 @@ def load_add_entry_tab():
         container_adicao.error("Erro ao Depositar")
     else:
       container_adicao.warning("Ainda há campos que não foram devidamente preenchidos")
+  date_filter = container_historico_entradas.date_input(label="Selecione um período",value=None,format="DD/MM/YYYY")
   entradas = load_all_entrys(user=st.session_state.usuario_logado)
+  lista = []
   if entradas:
+    if date_filter:
+      for date in entradas:
+        if date.entry_date[3:5] == str(date_filter.strftime("%d/%m/%Y"))[3:5]:
+          lista.append(date)
+      entradas  = lista
     valor_total_em_uso=0
     for i,item in enumerate(entradas):
       valor_total_em_uso += item.value
@@ -72,7 +79,17 @@ def load_add_entry_tab():
         if delete_entry(item.id):
           container_historico_entradas.success("Entrada excluida com sucesso")
       container_entrada_existente.divider()
-    container_historico_entradas.subheader(f"Valor Total em uso restante: R$ {valor_total_em_uso-sum(elemento.value * elemento.divisions for elemento in session.query(Counts).filter(Counts.owner == st.session_state.usuario_logado))}")
+    to_count = []
+    counts = session.query(Counts).filter(Counts.owner == st.session_state.usuario_logado).all()
+    if date_filter:
+      for count in counts:
+        if count.payment_day[3:5] == str(date_filter.strftime("%d/%m/%Y"))[3:5]:
+          to_count.append(count)
+      to_discount = sum(elemento.value for elemento in to_count)
+    else:
+      to_count = counts
+      to_discount = sum(elemento.value * elemento.divisions for elemento in to_count)
+    container_historico_entradas.subheader(f"Valor Total em uso restante: R$ {valor_total_em_uso-to_discount}")
   else:
     container_historico_entradas.warning("Atenção, você não possúi entradas registradas para uso contínuo")
 

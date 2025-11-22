@@ -69,13 +69,14 @@ def load_settings(item:int):
                    st.error("Falha ao realizar alterações")
 
 def load_payment(item):
-    month = datetime.now().month
-    year = datetime.now().year
-    dates = []
+    first_day = item.payment_day[0:2]
+    first_month = item.payment_day[3:5]
+    first_year= item.payment_day[6:]
+    dates = [f"{first_day}/{first_month}/{first_year}"]
     selections = st.container(horizontal=True)
     confirmed_payments = [pay_veri.payment_confirmed_date for pay_veri in session.query(Counts_registration).filter(Counts_registration.count_id == item.id, Counts_registration.owner == st.session_state.usuario_logado).all() ]
-    for i in range(int(item.divisions)):
-      month == int(item.payment_day[3:5])
+    for i in range(int(item.divisions)-1):
+      month = int(item.payment_day[3:5])
       year = int(item.payment_day[6:])
       if month == 12:
           year = year + 1
