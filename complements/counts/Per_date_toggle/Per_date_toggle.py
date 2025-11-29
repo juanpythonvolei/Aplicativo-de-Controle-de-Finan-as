@@ -35,7 +35,7 @@ def load_general_Vision_per_date():
         if new_selectbox:
           payment_day_total_value = 0
           for conta in list(set(contas_a_serem_pagas)):
-            payment_day_container = st.container(border=True)
+            payment_day_container = st.container(border=True,key=conta.id*9963)
             payment_day_total_value = payment_day_total_value + conta.value
             payment_day_container.info(F"""
   Descrição: {conta.description}
@@ -45,7 +45,7 @@ def load_general_Vision_per_date():
   Número de Parcelas (Total): {conta.divisions}
 
 """)
-            options_payment_day = payment_day_container.button(label=f"Pagar Conta",key=f"pagar conta mensal {conta.id*conta.divisions+63.2}")
+            options_payment_day = payment_day_container.button(label=f"Pagar Conta",key=f"pagar conta mensal {conta.id*conta.divisions+63.2*4545}")
             if options_payment_day:
               if pay_count(conta.id,user_id=st.session_state.usuario_logado,date=new_selectbox):
                 payment_day_container.success("Conta paga com sucesso")
