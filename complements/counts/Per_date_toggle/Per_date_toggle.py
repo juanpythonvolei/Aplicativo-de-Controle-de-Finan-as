@@ -4,7 +4,6 @@ from datetime import datetime
 from engine.Counts.Counts_manegement import *
 
 def load_general_Vision_per_date():
-  session.rollback()
   container = st.container(border=True,key=f"Payment_container")
   select_boxes =container.container(border=False,horizontal=True)
   payment_date_selection = select_boxes.selectbox(label="Selecione um dia de vencimento",index=None,options=(list(set([item.payment_day for item in load_count(st.session_state.usuario_logado)]))))
