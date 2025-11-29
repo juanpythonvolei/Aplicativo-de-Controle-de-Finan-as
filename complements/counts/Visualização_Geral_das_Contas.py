@@ -23,6 +23,7 @@ def load_general_vision():
           counts = load_count(user=st.session_state.usuario_logado)
           filter_selection = filters_container.multiselect(label="Selecione as contas que deseja visualizar",options=[conta.description for conta in counts])
           date_filter = filters_container.date_input(label="Filtro de Data",value=None,format="DD/MM/YYYY")
+          months = filters_container.date_input(label='Filtro de Mês',format="DD/MM/YYYY",value=None)
           filtereds = []
           if filter_selection:
             for count_to_filter in counts:
@@ -34,6 +35,12 @@ def load_general_vision():
                 if date_filtered_count.payment_day == date_filter.strftime("%d/%m/%Y"):
                   filtereds.append(date_filtered_count)
             counts = filtereds
+          if months != None:
+            for month in counts:
+                if month.payment_day[3:5] == months.strftime("%d/%m/%Y")[3:5]:
+                   filtereds.append(month)
+            counts = filtereds
+              
           general_vision_contanier.divider()
           
           for item in counts:

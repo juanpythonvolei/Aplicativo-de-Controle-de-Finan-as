@@ -6,7 +6,7 @@ import streamlit as st
 
 
 
-engine = create_engine(st.secrets['database_key'])
+engine = create_engine(url=st.secrets['database_key'],echo=False)
 base = declarative_base()
 
 class Users(base):
