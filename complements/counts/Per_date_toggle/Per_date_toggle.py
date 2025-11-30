@@ -79,7 +79,7 @@ def see_date_counts(payment_day:str,user:int):
   
 
       
-def query_counts_per_date(date:str,user:id,payment_day:str,month:str):
+def query_counts_per_date(date:str,user:id,payment_day:str):
   counts = session.query(Counts).filter(Counts.payment_day==payment_day,Counts.owner==user,Counts.active==True).all()
   final_dates = []
   for count in counts:
