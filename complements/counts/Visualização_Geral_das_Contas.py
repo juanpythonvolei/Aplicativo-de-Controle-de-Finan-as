@@ -2,14 +2,14 @@ from complements.counts.accessories.accessories import *
 from complements.counts.see_counts_history.see_counts_history import *
 
 def load_general_vision():
-      general_vision_contanier = st.container(border=True)
-      title_container = general_vision_contanier.container(horizontal=True)
-      title_container.title("Visão Geral das Contas")
+        general_vision_contanier = st.container(border=True)
+        title_container = general_vision_contanier.container(horizontal=True)
+        title_container.title("Visão Geral das Contas")
       
-      add_new_count =title_container.popover("➕")
-      with add_new_count:
+        add_new_count =title_container.popover("➕")
+        with add_new_count:
           load_add_count()
-      try:
+       
         general_vision_contanier.divider()
         subcontainer = general_vision_contanier.container(border=False,horizontal=True,horizontal_alignment="distribute",vertical_alignment="center")
         filters_container = general_vision_contanier.container(border=False,horizontal=True)
@@ -73,7 +73,6 @@ def load_general_vision():
                   info_count_button = options_container.popover("🔎")
                   with info_count_button:
                     load_infos(item.id)
-      except:
-        pass
+     
      
  
